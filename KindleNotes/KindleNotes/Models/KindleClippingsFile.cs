@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace KindleNotes.Models
 {
-
 	public class KindleClippingsFile
 	{
+		private const long maxFileSizeBytes = 10_485_760; // 10MB
 
 		public IBrowserFile BrowserFile;
 		public bool FileHasBeenParsed;
@@ -29,7 +29,7 @@ namespace KindleNotes.Models
 
 			currentClipping = new RawKindleClipping();
 			string line;
-			var reader = new StreamReader(BrowserFile.OpenReadStream());
+			var reader = new StreamReader(BrowserFile.OpenReadStream(maxFileSizeBytes));
 
 			while ((line = await reader.ReadLineAsync()) is not null)
 			{
