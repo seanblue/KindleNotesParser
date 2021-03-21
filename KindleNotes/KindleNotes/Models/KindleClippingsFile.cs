@@ -11,6 +11,7 @@ namespace KindleNotes.Models
 		private const int numberOfMb = 10;
 		private const long maxFileSizeBytes = numberOfMb * 1_024 * 1_024;
 
+		public PageStatus PageStatus;
 		public IBrowserFile BrowserFile;
 		public string ErrorMessage;
 
@@ -19,7 +20,11 @@ namespace KindleNotes.Models
 
 		internal async Task ParseFile()
 		{
+			if (BrowserFile is null)
+				return;
+
 			Reset();
+			PageStatus = PageStatus.Loading;
 
 			try
 			{
@@ -27,22 +32,30 @@ namespace KindleNotes.Models
 			}
 			catch (IOException)
 			{
-				ErrorMessage = $"The file exceeded the max length of {numberOfMb}MB.";
+				SetError($"The file exceeded the max length of {numberOfMb}MB.");
 				return;
 			}
 			catch (Exception)
 			{
-				ErrorMessage = "An unknown error has occurred while reading the file.";
+				SetError("An unknown error has occurred while reading the file.");
 				return;
 			}
 
 			if (rawClippings.Count == 0)
 			{
-				ErrorMessage = "The file did not contain any Kindle highlights or notes.";
+				SetError("The file did not contain any Kindle highlights or notes.");
 				return;
 			}
 
 			ProcessFileContent();
+
+			PageStatus = PageStatus.Loaded;
+		}
+
+		private void SetError(string errorMessage)
+		{
+			ErrorMessage = errorMessage;
+			PageStatus = PageStatus.Error;
 		}
 
 		private void Reset()
