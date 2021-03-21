@@ -1,50 +1,81 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace KindleNotes.Models
 {
-
 	public class KindleClippingsFile
 	{
+		private const int numberOfMb = 10;
+		private const long maxFileSizeBytes = numberOfMb * 1_024 * 1_024;
 
-		public IBrowserFile BrowserFile;
-		public bool FileHasBeenParsed;
+		public PageStatus PageStatus;
+		public IBrowserFile SelectedFile
+		{
+			get => selectedFile;
+			set
+			{
+				selectedFile = value;
+				contentLoadedForCurrentFile = false;
+			}
+		}
+		public string ErrorMessage;
+		public List<RawKindleClipping> rawClippings => parsedClippingsFile.RawClippings ?? new();
 
-		public List<RawKindleClipping> rawClippings = new();
-		private RawKindleClipping currentClipping;
+		private IBrowserFile selectedFile;
+		private bool contentLoadedForCurrentFile;
+		private ParsedKindleClippingsFile parsedClippingsFile;
 
 		internal async Task ParseFile()
 		{
-			await ReadFileContent();
-			ProcessFileContent();
+			if (contentLoadedForCurrentFile || SelectedFile is null)
+				return;
 
-			FileHasBeenParsed = true;
-		}
+			Reset();
+			PageStatus = PageStatus.Loading;
 
-		private async Task ReadFileContent()
-		{
-			rawClippings.Clear();
-
-			currentClipping = new RawKindleClipping();
-			string line;
-			var reader = new StreamReader(BrowserFile.OpenReadStream());
-
-			while ((line = await reader.ReadLineAsync()) is not null)
+			try
 			{
-				currentClipping.AddLine(line);
-				if (currentClipping.FullyInitialized)
-				{
-					rawClippings.Add(currentClipping);
-					currentClipping = new RawKindleClipping();
-				}
+				var parser = new KindleClippingsStreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
+				parsedClippingsFile = await parser.GetParsedFile();
 			}
+			catch (IOException)
+			{
+				SetErrorState($"The file exceeded the max length of {numberOfMb}MB.");
+				return;
+			}
+			catch (Exception)
+			{
+				SetErrorState("An unknown error has occurred while reading the file.");
+				return;
+			}
+
+			if (rawClippings.Count == 0)
+			{
+				SetErrorState("The file did not contain any Kindle highlights or notes.");
+				return;
+			}
+
+			SetLoadedState();
 		}
 
-		private void ProcessFileContent()
+		private void SetLoadedState()
 		{
+			contentLoadedForCurrentFile = true;
+			PageStatus = PageStatus.Loaded;
+		}
 
+		private void SetErrorState(string errorMessage)
+		{
+			ErrorMessage = errorMessage;
+			PageStatus = PageStatus.Error;
+		}
+
+		private void Reset()
+		{
+			ErrorMessage = null;
 		}
 	}
 }

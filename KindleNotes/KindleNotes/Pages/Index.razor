@@ -1,4 +1,6 @@
-﻿@page "/"
+﻿@using KindleNotes.Models;
+
+@page "/"
 
 <h1>Kindle Notes and Highlights</h1>
 
@@ -8,20 +10,29 @@
 </EditForm>
 
 <h3>File Content</h3>
-@if (kindleClippingsFile.FileHasBeenParsed)
+
+@if (kindleClippingsFile.PageStatus == PageStatus.InitialState)
+{
+    <div>No content has been loaded.</div>
+}
+else if (kindleClippingsFile.PageStatus == PageStatus.Loading)
+{
+    <div>Loading...</div>
+}
+else if (kindleClippingsFile.PageStatus == PageStatus.Error)
+{
+    <div>@kindleClippingsFile.ErrorMessage</div>
+}
+else
 {
     <div>
         @foreach (var clipping in kindleClippingsFile.rawClippings)
         {
-            <h4>Clipping Entry with @clipping.Lines.Count lines</h4>
+            <h4>Clipping of type @clipping.Type</h4>
             @foreach (var line in clipping.Lines)
             {
                 <div>@line</div>
             }
         }
     </div>
-}
-else
-{
-    <div>No content yet!</div>
 }
