@@ -9,6 +9,8 @@ namespace KindleNotes.Models
 		
 		public bool FullyInitialized;
 
+		public List<string> Lines => lines;
+
 		public KindleClippingType Type
 		{
 			get
@@ -38,7 +40,5 @@ namespace KindleNotes.Models
 			else if (!string.IsNullOrWhiteSpace(line))
 				lines.Add(line);
 		}
-
-		public List<string> Lines => lines;
 	}
 }

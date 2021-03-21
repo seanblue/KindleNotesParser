@@ -22,11 +22,11 @@ namespace KindleNotes.Models
 			}
 		}
 		public string ErrorMessage;
-		public List<RawKindleClipping> rawClippings = new();
+		public List<RawKindleClipping> rawClippings => parsedClippingsFile.RawClippings ?? new();
 
 		private IBrowserFile selectedFile;
 		private bool contentLoadedForCurrentFile;
-		private RawKindleClipping currentClipping;
+		private ParsedKindleClippingsFile parsedClippingsFile;
 
 		internal async Task ParseFile()
 		{
@@ -38,7 +38,8 @@ namespace KindleNotes.Models
 
 			try
 			{
-				await ReadFileContent();
+				var parser = new KindleClippingsStreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
+				parsedClippingsFile = await parser.GetParsedFile();
 			}
 			catch (IOException)
 			{
@@ -57,7 +58,6 @@ namespace KindleNotes.Models
 				return;
 			}
 
-			ProcessFileContent();
 			SetLoadedState();
 		}
 
@@ -75,30 +75,7 @@ namespace KindleNotes.Models
 
 		private void Reset()
 		{
-			rawClippings.Clear();
-			currentClipping = new RawKindleClipping();
 			ErrorMessage = null;
-		}
-
-		private async Task ReadFileContent()
-		{
-			string line;
-			using var reader = new StreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
-
-			while ((line = await reader.ReadLineAsync()) is not null)
-			{
-				currentClipping.AddLine(line);
-				if (currentClipping.FullyInitialized)
-				{
-					rawClippings.Add(currentClipping);
-					currentClipping = new RawKindleClipping();
-				}
-			}
-		}
-
-		private void ProcessFileContent()
-		{
-
 		}
 	}
 }

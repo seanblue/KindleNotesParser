@@ -12,7 +12,7 @@ namespace KindleNotes.Pages
 			{ "accept", ".txt" }
 		};
 
-		protected KindleClippingsFile kindleClippingsFile = new();
+		private readonly KindleClippingsFile kindleClippingsFile = new();
 
 		protected void SetFile(InputFileChangeEventArgs e)
 		{
