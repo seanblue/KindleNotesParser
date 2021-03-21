@@ -1,10 +1,9 @@
 ﻿namespace KindleNotes.Models
 {
-	public class KindleNote
+	public class KindleBookmark
 	{
 		public string Title;
 		public int Location;
 		public string DateAdded;
-		public string Content;
 	}
 }

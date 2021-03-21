@@ -13,7 +13,7 @@
     <div>
         @foreach (var clipping in kindleClippingsFile.rawClippings)
         {
-            <h4>Clipping Entry with @clipping.Lines.Count lines</h4>
+            <h4>Clipping of type @clipping.Type</h4>
             @foreach (var line in clipping.Lines)
             {
                 <div>@line</div>
