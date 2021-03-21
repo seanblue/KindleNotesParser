@@ -8,7 +8,7 @@ namespace KindleNotes.Models
 {
 	public class KindleClippingsFile
 	{
-		private const int numberOfMb = 2;
+		private const int numberOfMb = 10;
 		private const long maxFileSizeBytes = numberOfMb * 1_024 * 1_024;
 
 		public IBrowserFile BrowserFile;
@@ -28,10 +28,18 @@ namespace KindleNotes.Models
 			catch (IOException)
 			{
 				ErrorMessage = $"The file exceeded the max length of {numberOfMb}MB.";
+				return;
 			}
 			catch (Exception)
 			{
 				ErrorMessage = "An unknown error has occurred while reading the file.";
+				return;
+			}
+
+			if (rawClippings.Count == 0)
+			{
+				ErrorMessage = "The file did not contain any Kindle highlights or notes.";
+				return;
 			}
 
 			ProcessFileContent();
