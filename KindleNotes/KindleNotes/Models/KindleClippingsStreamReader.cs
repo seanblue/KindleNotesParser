@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KindleNotes.Models
 {
-	public class KindleClippingsStreamReader/* : IDisposable*/
+	public class KindleClippingsStreamReader
 	{
 		private readonly Stream stream;
 		
@@ -34,10 +34,5 @@ namespace KindleNotes.Models
 
 			return new ParsedKindleClippingsFile(rawClippings);
 		}
-
-		//public void Dispose()
-		//{
-		//	stream.Dispose();
-		//}
 	}
 }
