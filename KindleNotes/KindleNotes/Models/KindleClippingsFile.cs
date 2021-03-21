@@ -12,15 +12,25 @@ namespace KindleNotes.Models
 		private const long maxFileSizeBytes = numberOfMb * 1_024 * 1_024;
 
 		public PageStatus PageStatus;
-		public IBrowserFile BrowserFile;
+		public IBrowserFile SelectedFile
+		{
+			get => selectedFile;
+			set
+			{
+				selectedFile = value;
+				contentLoadedForCurrentFile = false;
+			}
+		}
 		public string ErrorMessage;
-
 		public List<RawKindleClipping> rawClippings = new();
+
+		private IBrowserFile selectedFile;
+		private bool contentLoadedForCurrentFile;
 		private RawKindleClipping currentClipping;
 
 		internal async Task ParseFile()
 		{
-			if (BrowserFile is null)
+			if (contentLoadedForCurrentFile || SelectedFile is null)
 				return;
 
 			Reset();
@@ -32,27 +42,32 @@ namespace KindleNotes.Models
 			}
 			catch (IOException)
 			{
-				SetError($"The file exceeded the max length of {numberOfMb}MB.");
+				SetErrorState($"The file exceeded the max length of {numberOfMb}MB.");
 				return;
 			}
 			catch (Exception)
 			{
-				SetError("An unknown error has occurred while reading the file.");
+				SetErrorState("An unknown error has occurred while reading the file.");
 				return;
 			}
 
 			if (rawClippings.Count == 0)
 			{
-				SetError("The file did not contain any Kindle highlights or notes.");
+				SetErrorState("The file did not contain any Kindle highlights or notes.");
 				return;
 			}
 
 			ProcessFileContent();
+			SetLoadedState();
+		}
 
+		private void SetLoadedState()
+		{
+			contentLoadedForCurrentFile = true;
 			PageStatus = PageStatus.Loaded;
 		}
 
-		private void SetError(string errorMessage)
+		private void SetErrorState(string errorMessage)
 		{
 			ErrorMessage = errorMessage;
 			PageStatus = PageStatus.Error;
@@ -68,7 +83,7 @@ namespace KindleNotes.Models
 		private async Task ReadFileContent()
 		{
 			string line;
-			using var reader = new StreamReader(BrowserFile.OpenReadStream(maxFileSizeBytes));
+			using var reader = new StreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
 
 			while ((line = await reader.ReadLineAsync()) is not null)
 			{

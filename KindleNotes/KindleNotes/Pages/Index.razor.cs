@@ -16,7 +16,7 @@ namespace KindleNotes.Pages
 
 		protected void SetFile(InputFileChangeEventArgs e)
 		{
-			kindleClippingsFile.BrowserFile = e.File;
+			kindleClippingsFile.SelectedFile = e.File;
 		}
 
 		protected async Task Submit()
