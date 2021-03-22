@@ -24,7 +24,7 @@ namespace KindleNotes.ViewModels
 			var locationStringSplit = locationLine.Remove(0, KindleClippingTypeConsts.HighlightTypeKeyword.Length).Trim().Split('-');
 
 			StartLocation = int.Parse(locationStringSplit[0]);
-			EndLocation = int.Parse(locationStringSplit[0]);
+			EndLocation = int.Parse(locationStringSplit[1]);
 
 			Content = string.Join('\n', lines.Skip(2));
 		}
