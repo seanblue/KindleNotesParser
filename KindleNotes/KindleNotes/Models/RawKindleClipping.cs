@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace KindleNotes.Models
 {
@@ -6,7 +7,9 @@ namespace KindleNotes.Models
 	{
 		private const string clippingDelimiter = "==========";
 		private readonly List<string> lines = new();
-		
+
+		public Guid Id { get; } = Guid.NewGuid();
+
 		public bool FullyInitialized;
 
 		public List<string> Lines => lines;

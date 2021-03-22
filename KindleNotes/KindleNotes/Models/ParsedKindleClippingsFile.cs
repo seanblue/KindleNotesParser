@@ -4,13 +4,12 @@ namespace KindleNotes.Models
 {
 	public class ParsedKindleClippingsFile
 	{
-		public List<RawKindleClipping> RawClippings;
-
 		public ParsedKindleClippingsFile(List<RawKindleClipping> rawClippings)
 		{
 			RawClippings = rawClippings;
 		}
 
+		public List<RawKindleClipping> RawClippings { get; }
 		public bool IsEmpty => RawClippings.Count == 0;
 	}
 }

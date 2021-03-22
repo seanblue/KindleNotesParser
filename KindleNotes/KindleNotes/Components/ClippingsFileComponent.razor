@@ -1,0 +1,24 @@
+﻿@namespace KindleNotes.Components
+
+<div>
+    <h3>Bookmarks</h3>
+    @foreach (var bookmark in ClippingsFile.Bookmarks)
+    {
+        <BookmarkComponent Bookmark="@bookmark" />
+    }
+    <h3>Notes</h3>
+    @foreach (var note in ClippingsFile.Notes)
+    {
+        <NoteComponent Note="@note" />
+    }
+    <h3>Highlights</h3>
+    @foreach (var highlight in ClippingsFile.Highlights)
+    {
+        <HighlightComponent Highlight="@highlight" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ClippingsFileViewModel ClippingsFile { get; set; }
+}

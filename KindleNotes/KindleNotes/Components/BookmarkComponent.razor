@@ -1,0 +1,14 @@
+﻿@using KindleNotes.Models;
+
+@namespace KindleNotes.Components
+
+<div>
+    <div>ID: @Bookmark.Id</div>
+    <div>Title: @Bookmark.Title</div>
+    <div>Location: @Bookmark.Location</div>
+</div>
+
+@code {
+    [Parameter]
+    public KindleBookmarkViewModel Bookmark { get; set; }
+}

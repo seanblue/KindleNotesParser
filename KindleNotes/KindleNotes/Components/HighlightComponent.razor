@@ -1,0 +1,15 @@
+﻿@using KindleNotes.Models;
+
+@namespace KindleNotes.Components
+
+<div>
+    <div>ID: @Highlight.Id</div>
+    <div>Title: @Highlight.Title</div>
+    <div>Location: @Highlight.StartLocation-@Highlight.EndLocation</div>
+    <div>Contnet: @Highlight.Content</div>
+</div>
+
+@code {
+    [Parameter]
+    public KindleHighlightViewModel Highlight { get; set; }
+}

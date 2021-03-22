@@ -1,4 +1,5 @@
 ﻿using KindleNotes.Models;
+using KindleNotes.ViewModels;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Collections.Generic;
 using System.Threading.Tasks;

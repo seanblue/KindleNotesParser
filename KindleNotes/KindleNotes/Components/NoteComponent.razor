@@ -1,0 +1,15 @@
+﻿@using KindleNotes.Models;
+
+@namespace KindleNotes.Components
+
+<div>
+    <div>ID: @Note.Id</div>
+    <div>Title: @Note.Title</div>
+    <div>Location: @Note.Location</div>
+    <div>Contnet: @Note.Content</div>
+</div>
+
+@code {
+    [Parameter]
+    public KindleNoteViewModel Note { get; set; }
+}

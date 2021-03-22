@@ -9,7 +9,7 @@
     <input type="submit" class="btn btn-primary" value="Load" />
 </EditForm>
 
-<h3>File Content</h3>
+<h2>File Content</h2>
 
 @if (kindleClippingsFile.PageStatus == PageStatus.InitialState)
 {
@@ -25,5 +25,5 @@ else if (kindleClippingsFile.PageStatus == PageStatus.Error)
 }
 else
 {
-    <ParsedKindleClippingsFileView ParsedClippingsFile="@kindleClippingsFile.ParsedClippingsFile" />
+    <ClippingsFileComponent ClippingsFile="@kindleClippingsFile.clippingsFileViewModel" />
 }

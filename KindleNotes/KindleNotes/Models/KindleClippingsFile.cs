@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using KindleNotes.ViewModels;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -22,7 +22,8 @@ namespace KindleNotes.Models
 			}
 		}
 		public string ErrorMessage;
-		public ParsedKindleClippingsFile ParsedClippingsFile;
+		public ParsedKindleClippingsFile parsedClippingsFile;
+		public ClippingsFileViewModel clippingsFileViewModel;
 
 		private IBrowserFile selectedFile;
 		private bool contentLoadedForCurrentFile;
@@ -38,7 +39,7 @@ namespace KindleNotes.Models
 			try
 			{
 				var parser = new KindleClippingsStreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
-				ParsedClippingsFile = await parser.GetParsedFile();
+				parsedClippingsFile = await parser.GetParsedFile();
 			}
 			catch (IOException)
 			{
@@ -51,11 +52,13 @@ namespace KindleNotes.Models
 				return;
 			}
 
-			if (ParsedClippingsFile.IsEmpty)
+			if (parsedClippingsFile.IsEmpty)
 			{
-				SetErrorState("The file did not contain any Kindle highlights or notes.");
+				SetErrorState("The file did not contain any Kindle content.");
 				return;
 			}
+			
+			clippingsFileViewModel = new ClippingsFileViewModel(parsedClippingsFile);
 
 			SetLoadedState();
 		}
