@@ -25,14 +25,5 @@ else if (kindleClippingsFile.PageStatus == PageStatus.Error)
 }
 else
 {
-    <div>
-        @foreach (var clipping in kindleClippingsFile.rawClippings)
-        {
-            <h4>Clipping of type @clipping.Type</h4>
-            @foreach (var line in clipping.Lines)
-            {
-                <div>@line</div>
-            }
-        }
-    </div>
+    <ParsedKindleClippingsFileView ParsedClippingsFile="@kindleClippingsFile.ParsedClippingsFile" />
 }

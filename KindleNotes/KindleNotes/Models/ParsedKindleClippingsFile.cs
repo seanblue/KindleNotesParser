@@ -10,5 +10,7 @@ namespace KindleNotes.Models
 		{
 			RawClippings = rawClippings;
 		}
+
+		public bool IsEmpty => RawClippings.Count == 0;
 	}
 }

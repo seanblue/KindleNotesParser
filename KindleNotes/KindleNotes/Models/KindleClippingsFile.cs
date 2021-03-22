@@ -22,11 +22,10 @@ namespace KindleNotes.Models
 			}
 		}
 		public string ErrorMessage;
-		public List<RawKindleClipping> rawClippings => parsedClippingsFile.RawClippings ?? new();
+		public ParsedKindleClippingsFile ParsedClippingsFile;
 
 		private IBrowserFile selectedFile;
 		private bool contentLoadedForCurrentFile;
-		private ParsedKindleClippingsFile parsedClippingsFile;
 
 		internal async Task ParseFile()
 		{
@@ -39,7 +38,7 @@ namespace KindleNotes.Models
 			try
 			{
 				var parser = new KindleClippingsStreamReader(SelectedFile.OpenReadStream(maxFileSizeBytes));
-				parsedClippingsFile = await parser.GetParsedFile();
+				ParsedClippingsFile = await parser.GetParsedFile();
 			}
 			catch (IOException)
 			{
@@ -52,7 +51,7 @@ namespace KindleNotes.Models
 				return;
 			}
 
-			if (rawClippings.Count == 0)
+			if (ParsedClippingsFile.IsEmpty)
 			{
 				SetErrorState("The file did not contain any Kindle highlights or notes.");
 				return;
