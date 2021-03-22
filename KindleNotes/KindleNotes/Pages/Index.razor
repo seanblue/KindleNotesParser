@@ -11,19 +11,21 @@
 
 <h2>File Content</h2>
 
-@if (kindleClippingsFile.PageStatus == PageStatus.InitialState)
-{
-    <div>No content has been loaded.</div>
-}
-else if (kindleClippingsFile.PageStatus == PageStatus.Loading)
-{
-    <div>Loading...</div>
-}
-else if (kindleClippingsFile.PageStatus == PageStatus.Error)
-{
-    <div>@kindleClippingsFile.ErrorMessage</div>
-}
-else
-{
-    <ClippingsFileComponent ClippingsFile="@kindleClippingsFile.clippingsFileViewModel" />
-}
+<div>
+    @if (kindleClippingsFile.PageStatus == PageStatus.InitialState)
+    {
+        <div>No content has been loaded.</div>
+    }
+    else if (kindleClippingsFile.PageStatus == PageStatus.Loading)
+    {
+        <div>Loading...</div>
+    }
+    else if (kindleClippingsFile.PageStatus == PageStatus.Error)
+    {
+        <div>@kindleClippingsFile.ErrorMessage</div>
+    }
+    else
+    {
+        <ClippingsFileComponent ClippingsFile="@kindleClippingsFile.clippingsFileViewModel" />
+    }
+</div>
