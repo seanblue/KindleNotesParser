@@ -1,11 +1,9 @@
 ﻿@namespace KindleNotes.Components
 
-<div class="clipping-row">
-    <div>ID: @Content.Id</div>
-    <div>Type: @Content.Type</div>
+<div class="content">
+    <div class="location">@Content.Type | Location: @Content.Location</div>
     <div>Title: @Content.Title</div>
-    <div>Location: @Content.Location</div>
-    <div>Content: @Content.Content</div>
+    <div class="details">@Content.Details</div>
 </div>
 
 @code {

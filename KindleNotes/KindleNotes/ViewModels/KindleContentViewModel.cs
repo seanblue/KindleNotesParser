@@ -10,14 +10,14 @@ namespace KindleNotes.ViewModels
 		public string Type { get; }
 		public string Title { get; }
 		public string Location { get; }
-		public string Content { get; }
+		public string Details { get; }
 
 		public KindleContentViewModel(RawKindleClipping clipping)
 		{
 			Id = clipping.Id;
 			Type = clipping.Type.ToString();
 
-			var (titleLine, locationAndDateLine, contentLines) = clipping.Lines;
+			var (titleLine, locationAndDateLine, detailsLines) = clipping.Lines;
 
 			Title = titleLine;
 
@@ -25,7 +25,7 @@ namespace KindleNotes.ViewModels
 				return;
 
 			Location = GetLocation(Type, locationAndDateLine);
-			Content = string.Join('\n', contentLines);
+			Details = string.Join('\n', detailsLines);
 		}
 
 		private static string GetLocation(string type, string locationAndDateLine)

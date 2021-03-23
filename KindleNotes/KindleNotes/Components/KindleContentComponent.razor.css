@@ -1,0 +1,13 @@
+﻿.content {
+    font-size: 14px;
+    border-bottom: solid 1px #e7e7e7;
+}
+
+.location {
+    color: #565959;
+}
+
+.details {
+    margin-top: 10px;
+    white-space: pre-line;
+}
